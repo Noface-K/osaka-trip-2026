@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f3ed" />
+  <meta name="description" content="大阪獨旅 2026：彈性行程卡、餐廳菜單、地圖導航、即時逐時天氣。" />
+  <title>關西漫遊｜大阪獨旅 2026</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand" role="banner"><span class="brand-mark" aria-hidden="true">関</span><div><div class="brand-title">關西漫遊<span class="brand-dot">.</span></div><div class="brand-sub">OSAKA SOLO TRIP · 2026</div></div></div>
+      <button class="icon-button" id="refreshBtn" type="button" title="更新資料和天氣" aria-label="更新資料和天氣"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.7 9A7 7 0 0118 6.5L20 12M4 12l2 5.5A7 7 0 0018.3 15"/></svg></button>
+    </header>
+    <main id="content">
+      <section class="page page-active" id="page-home" aria-label="首頁">
+        <div class="intro"><div class="eyebrow">11.04 — 11.13 · 10 DAYS</div><h1>今天，想去哪裡？<span class="sun-dot">✳</span></h1><p>不用趕行程。挑一張喜歡的卡，出發就好。</p></div>
+        <section class="weather-card" aria-label="逐時天氣">
+          <div class="section-top"><div><div class="micro-label inverse">WEATHER · 接下來 12 小時</div><h2 id="weatherTitle">大阪天氣 <span class="weather-emoji">☀</span></h2></div><button class="weather-update" type="button" id="weatherRefresh">↻ 更新</button></div>
+          <div class="city-tabs" id="cityTabs" role="group" aria-label="選擇預報地點"></div>
+          <div id="weatherSummary" class="weather-summary">正在讀取天氣預報…</div>
+          <div id="weatherHours" class="weather-hours" aria-label="未來十二小時天氣"></div>
+          <div id="weatherFooter" class="weather-footnote">氣象資料：Open-Meteo · 日本時間（JST）</div>
+        </section>
+        <section class="mini-section"><div class="section-heading"><div><div class="micro-label">YOUR BASE</div><h2>你的大阪據點</h2></div></div><div class="hotel-card"><div class="hotel-icon">⌂</div><div class="hotel-meta"><strong>BRACKETS HOTEL 大阪本町</strong><span>本町站附近 · 每天回來的地方</span></div><button class="small-button" data-hotel-nav type="button">導航 ↗</button></div></section>
+        <section class="mini-section"><div class="section-heading"><div><div class="micro-label">PICK YOUR DAY</div><h2>今天抽哪張卡？</h2></div><button class="text-link" type="button" data-goto="cards">全部行程 →</button></div><div class="featured-cards" id="featuredCards"></div></section>
+        <section class="mini-section"><div class="section-heading"><div><div class="micro-label">FOOD HUNT</div><h2>餓了？先找吃的</h2></div><button class="text-link" type="button" data-goto="food">餐廳圖鑑 →</button></div><div class="feature-counts"><div><span id="restaurantCount">30</span><small>間餐廳</small></div><div><span id="menuCount">967</span><small>筆菜單資料</small></div><div><span id="cardCount">7</span><small>張行程卡</small></div></div></section>
+        <div class="source-status" id="homeDataStatus">資料準備中…</div>
+      </section>
+      <section class="page" id="page-cards" aria-label="行程卡">
+        <div class="page-title"><div class="micro-label">CHOOSE YOUR ADVENTURE</div><h1>行程卡片<span class="title-number" id="cardsBadge">07</span></h1><p>沒有固定日期。看天氣、看心情，自由出牌。</p></div>
+        <div class="filter-row" id="cardFilters" role="group" aria-label="篩選行程"><button class="pill active" data-card-filter="all">全部</button><button class="pill" data-card-filter="sun">晴天優先</button><button class="pill" data-card-filter="rain">雨天可用</button><button class="pill" data-card-filter="easy">輕鬆</button></div>
+        <div class="cards-grid" id="cardsGrid"></div>
+      </section>
+      <section class="page" id="page-food" aria-label="餐廳圖鑑">
+        <div class="page-title"><div class="micro-label">EAT YOUR WAY</div><h1>餐廳圖鑑<span class="title-number" id="foodBadge">30</span></h1><p>想吃再找，不用照表操課。</p></div>
+        <div class="search-wrap"><span aria-hidden="true">⌕</span><input type="search" id="foodSearch" placeholder="搜尋店名、地區、料理…" autocomplete="off" aria-label="搜尋餐廳"/><button id="clearSearch" type="button" aria-label="清除搜尋">×</button></div>
+        <div class="filter-row" id="foodFilters" role="group" aria-label="餐廳分類"></div>
+        <div class="list-count" id="foodResultsCount"></div>
+        <div class="food-list" id="foodList"></div><button class="load-more" id="loadMore" type="button" hidden>顯示更多餐廳 ↓</button>
+      </section>
+      <section class="page" id="page-tools" aria-label="旅行工具">
+        <div class="page-title"><div class="micro-label">YOUR TRAVEL TOOLBOX</div><h1>旅行工具<span class="title-number">↗</span></h1><p>捷徑都在這，少切幾個 App。</p></div>
+        <div class="tool-card"><div class="micro-label">NAVIGATION</div><h3>偏好的地圖</h3><p>景點和餐廳都可以單獨選 Apple 地圖或 Google Maps，這裡設定的是主要導航按鈕。</p><div class="map-choice"><button type="button" class="map-option" data-map-pref="google">Google Maps</button><button type="button" class="map-option" data-map-pref="apple">Apple 地圖</button></div></div>
+        <div class="tool-card"><div class="micro-label">QUICK ACCESS</div><h3>常用捷徑</h3><div class="quick-links"><button type="button" data-hotel-nav>⌂ 飯店導航 <span>↗</span></button><a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%A7%85%20%E5%A4%A7%E9%98%AA" target="_blank" rel="noopener">Ⓜ 本町站 <span>↗</span></a><a href="https://www.google.com/maps/search/?api=1&query=%E9%81%93%E9%A0%93%E5%A0%80%20%E5%A4%A7%E9%98%AA" target="_blank" rel="noopener">✳ 道頓堀 <span>↗</span></a><a href="https://docs.google.com/spreadsheets/d/17LqXVo45-GJVDftFR3hk0iZYOVyDugb2Z61LFTcX8Cw/edit" target="_blank" rel="noopener">▦ 原始試算表 <span>↗</span></a></div></div>
+        <div class="tool-card"><div class="micro-label">SHEET SYNC</div><h3>試算表同步狀態</h3><p id="syncDescription">讀取中…</p><button class="solid-button" type="button" id="syncNow">↻ 重新讀取試算表</button><p class="help-note">網站內建 2026/11/2 快照，離線也有資料。公開試算表的存取權限設定完成後，重新整理即可取得更新。請注意：試算表一旦設為「知道連結的任何人可查看」，其全部分頁都有可能被看到。</p></div>
+        <div class="tool-card"><div class="micro-label">OFFLINE · DATA</div><h3>資料與注意事項</h3><p>營業時間、菜單價格、訂位條件會變動，出發前以店家官網或訂位頁為準。逐時天氣為預報，並非即時觀測或降雨保證。日本交通路線請以當下地圖為準。</p><p class="help-note">本網站不會自動公開你的 GPS 位置；地圖導航由你主動點擊開啟。資料在你的瀏覽器暫存，沒有登入系統。</p></div>
+        <div class="site-footer">KANSAI WANDER · 2026<br/>做給一個想好好玩十天的人。</div>
+      </section>
+    </main>
+    <nav class="bottom-nav" aria-label="網站主要導覽"><button type="button" data-nav="home" class="active"><span class="nav-icon">◈</span><span>首頁</span></button><button type="button" data-nav="cards"><span class="nav-icon">▦</span><span>行程</span></button><button type="button" data-nav="food"><span class="nav-icon">♨</span><span>美食</span></button><button type="button" data-nav="tools"><span class="nav-icon">⌘</span><span>工具</span></button></nav>
+    <div class="overlay" id="overlay" hidden><div class="overlay-backdrop" data-close></div><section class="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-handle"></div><button type="button" class="sheet-close" data-close aria-label="關閉詳情">×</button><div id="sheetContent"></div></section></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script defer src="assets/app.js"></script>
+</body>
+</html>
