@@ -1,34 +1,27 @@
-# 關西漫遊 · 大阪獨旅 2026
+# 關西漫遊 · 大阪獨旅 2026（v2）
 
-一個無框架、免編譯的手機優先旅遊網站。資料根據「11/4-11/13大阪獨旅」Google 試算表，包含 7 張可自由選擇的行程卡、30 間餐廳、967 筆菜單明細，另有 Open-Meteo 未來 12 小時天氣與 Apple／Google 地圖導航。
+手機優先、免編譯的旅行網站。預設護眼深色，右上方按鈕可切換淺色。
 
-## GitHub Pages 上線
+本版已把 2026-11-03 Google 試算表資料打包到 `assets/snapshot.json`：7 張修正過的行程卡、30 間餐廳的行程／車站／飯店周邊分類、967 筆菜單明細。B 卡已改成松島新地 **15:00～17:00**，一般行程晚餐後夜逛，22～23 時左右返回飯店。
 
-1. 在 GitHub 建立 public repository（例如 `osaka-trip-2026`）。
-2. 將這個資料夾內全部檔案（包括 `assets/`、`index.html` 和 `.nojekyll`）放進儲存庫根目錄。
-3. Settings → Pages → Build and deployment，選 `Deploy from a branch`、`main`、`/(root)` 並儲存。
-4. Pages 網址通常是 `https://<帳號>.github.io/<儲存庫名稱>/`，待 GitHub 顯示部署完成後確認。
+## 覆蓋上傳到 GitHub
 
-## 同步試算表
+1. 前往 https://github.com/Noface-K/osaka-trip-2026 。
+2. 點 `Add file → Upload files`，將本 ZIP **解壓縮後的 6 個項目（含 `assets` 資料夾）**一起拖入。若 GitHub 網頁不允許直接覆蓋同名檔案，可到 GitHub 網頁編輯器操作，或把變更逐檔替換。不要把 ZIP 本身當網站檔案上傳。
+3. 按 `Commit changes`。已設定好的 GitHub Pages 會自動重新部署，通常不用再修改 Pages 的 Source、Branch 或 Root。
+4. 確認 https://noface-k.github.io/osaka-trip-2026/ 顯示暗色介面和新分類後，重新整理或在 iPhone 關閉再開網站。
 
-- 網站預設先讀 `assets/snapshot.json` 作為離線保底資料。
-- 再嘗試 Google Sheets 的 Google Visualization Query JSONP 讀取原始試算表的「工作表2」（行程）、「工作表3」（餐廳）及「菜單明細」。
-- 原試算表必須被授予能匿名讀取的權限，否則網站會保留快照、不會顯示錯誤資料。
-- **注意**：直接把原試算表設為「知道連結者可查看」，可能連其他分頁也會對外可讀。若不想公開「工作表1」，應另建一份只包含公開資料的鏡像試算表，再修改 `assets/app.js` 的 `SHEET_ID`。
-- 公開檢視／發布格式與瀏覽器政策可能更改；可在網站「工具」頁看同步狀態。如果即時讀取失敗，仍可以離線快照使用。
-- 資料來源不應包含不願公開的個人資訊。
+## 自動讀取 Google 試算表
 
-## 天氣
+網站每次開啟會先用新版內建 `snapshot.json` 顯示資料，再嘗試直接透過 Google Sheets Visualization JSONP 同步工作表2、工作表3及菜單明細。同步成功才換成線上資料，並顯示時間；失敗會保留內建快照。同步是**讀取邏輯已實作**，不是保證在試算表維持私人權限時就會自動更新。
 
-Open-Meteo 公開 API 取得大阪、京都、奈良、神戶、天橋立逐時預報。無需密鑰，需網路連線，遵守 API 非商業免費使用條款。離線時清楚標示快取或未能更新。
+要讓匿名訪客網站能讀取，原試算表必須允許匿名檢視。**請注意這會讓整份試算表的其他分頁（例如工作表1）也可能被看到**。想保護工作表1，最好先另外建立只有公開資料三張分頁的鏡像表，再改程式中的 `SHEET_ID`；此外部分 Google 分享／發布設定可能影響存取方式，請在網站工具頁核對同步結果。沒有開放前不要誤以為修改試算表會自動上網站。
 
-## 本機預覽
+沒有 Google Sheets 即時讀取時仍可用本地快照、搜尋／交叉篩選、收藏與導航。收藏和介面主題存在當前裝置瀏覽器。
 
-在本目錄執行 `python -m http.server 8000`，瀏覽 `http://localhost:8000/`。不使用前端套件，純 HTML + CSS + JavaScript。
+## 其他
 
-## 技術備註
-
-- Apple 地圖：https://maps.apple.com/?daddr=...&dirflg=r
-- Google Maps：https://www.google.com/maps/dir/?api=1&destination=...&travelmode=transit
-- 不蒐集定位，也不需要使用者登入。
-- 旅遊資料的確切更新時間、營業時間與預約資訊仍應以店家公告為準。
+- 天氣：Open-Meteo，未來12小時，五個城市可切換，需要網路。
+- 地圖：Google Maps 或 Apple Maps，按導航才開啟。
+- 飯店周邊：目前 CARNE asaeda 及鶏soba 座銀にぼし店兩家 Google Maps 步行路線核對為9、12分鐘。其他鄰近車站資訊有部分是以公開店家交通指引整理，不全是逐條現測；已在備註列來源。
+- 行程時段是參考，不是已訂交通或餐廳。

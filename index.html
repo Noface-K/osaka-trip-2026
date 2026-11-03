@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f3ed" />
+  <meta name="theme-color" content="#111719" />
+  <meta name="color-scheme" content="dark light" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("kansai-theme")==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
   <meta name="description" content="大阪獨旅 2026：彈性行程卡、餐廳菜單、地圖導航、即時逐時天氣。" />
   <title>關西漫遊｜大阪獨旅 2026</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
@@ -14,7 +16,7 @@
   <div id="app">
     <header class="topbar">
       <div class="brand" role="banner"><span class="brand-mark" aria-hidden="true">関</span><div><div class="brand-title">關西漫遊<span class="brand-dot">.</span></div><div class="brand-sub">OSAKA SOLO TRIP · 2026</div></div></div>
-      <button class="icon-button" id="refreshBtn" type="button" title="更新資料和天氣" aria-label="更新資料和天氣"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.7 9A7 7 0 0118 6.5L20 12M4 12l2 5.5A7 7 0 0018.3 15"/></svg></button>
+      <div class="top-actions"><button class="icon-button" type="button" data-theme-toggle aria-label="切換淺色模式" title="切換淺色模式">☀</button><button class="icon-button" id="refreshBtn" type="button" title="更新資料和天氣" aria-label="更新資料和天氣"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.7 9A7 7 0 0118 6.5L20 12M4 12l2 5.5A7 7 0 0018.3 15"/></svg></button></div>
     </header>
     <main id="content">
       <section class="page page-active" id="page-home" aria-label="首頁">
@@ -38,16 +40,17 @@
       </section>
       <section class="page" id="page-food" aria-label="餐廳圖鑑">
         <div class="page-title"><div class="micro-label">EAT YOUR WAY</div><h1>餐廳圖鑑<span class="title-number" id="foodBadge">30</span></h1><p>想吃再找，不用照表操課。</p></div>
-        <div class="search-wrap"><span aria-hidden="true">⌕</span><input type="search" id="foodSearch" placeholder="搜尋店名、地區、料理…" autocomplete="off" aria-label="搜尋餐廳"/><button id="clearSearch" type="button" aria-label="清除搜尋">×</button></div>
-        <div class="filter-row" id="foodFilters" role="group" aria-label="餐廳分類"></div>
-        <div class="list-count" id="foodResultsCount"></div>
+        <div class="search-wrap"><span aria-hidden="true">⌕</span><input type="search" id="foodSearch" placeholder="搜尋店名、地區、車站、料理…" autocomplete="off" aria-label="搜尋餐廳"/><button id="clearSearch" type="button" aria-label="清除搜尋">×</button></div>
+        <div class="food-filter-block"><div class="filter-label">料理種類</div><div class="filter-row" id="foodFilters" role="group" aria-label="料理種類"></div><div class="filter-label">對應行程 <small>可重複歸類</small></div><div class="filter-row" id="tripFoodFilters" role="group" aria-label="行程區域與飯店周邊"></div><div class="filter-label">鄰近車站 <small>步行約15分鐘內</small></div><div class="filter-row" id="stationFoodFilters" role="group" aria-label="鄰近車站"></div></div>
+        <div class="food-count-row"><div class="list-count" id="foodResultsCount"></div><button type="button" class="reset-button" id="resetFoodFilters" data-food-reset hidden>清除篩選 ×</button></div>
         <div class="food-list" id="foodList"></div><button class="load-more" id="loadMore" type="button" hidden>顯示更多餐廳 ↓</button>
       </section>
       <section class="page" id="page-tools" aria-label="旅行工具">
         <div class="page-title"><div class="micro-label">YOUR TRAVEL TOOLBOX</div><h1>旅行工具<span class="title-number">↗</span></h1><p>捷徑都在這，少切幾個 App。</p></div>
         <div class="tool-card"><div class="micro-label">NAVIGATION</div><h3>偏好的地圖</h3><p>景點和餐廳都可以單獨選 Apple 地圖或 Google Maps，這裡設定的是主要導航按鈕。</p><div class="map-choice"><button type="button" class="map-option" data-map-pref="google">Google Maps</button><button type="button" class="map-option" data-map-pref="apple">Apple 地圖</button></div></div>
+        <div class="tool-card"><div class="micro-label">APPEARANCE</div><h3>顯示模式</h3><p>預設使用護眼深色。也可以按右上角 ☀／☾ 即時切換深色、淺色。</p><button type="button" class="solid-button" data-theme-toggle>☀ 切換顏色</button></div>
         <div class="tool-card"><div class="micro-label">QUICK ACCESS</div><h3>常用捷徑</h3><div class="quick-links"><button type="button" data-hotel-nav>⌂ 飯店導航 <span>↗</span></button><a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%A7%85%20%E5%A4%A7%E9%98%AA" target="_blank" rel="noopener">Ⓜ 本町站 <span>↗</span></a><a href="https://www.google.com/maps/search/?api=1&query=%E9%81%93%E9%A0%93%E5%A0%80%20%E5%A4%A7%E9%98%AA" target="_blank" rel="noopener">✳ 道頓堀 <span>↗</span></a><a href="https://docs.google.com/spreadsheets/d/17LqXVo45-GJVDftFR3hk0iZYOVyDugb2Z61LFTcX8Cw/edit" target="_blank" rel="noopener">▦ 原始試算表 <span>↗</span></a></div></div>
-        <div class="tool-card"><div class="micro-label">SHEET SYNC</div><h3>試算表同步狀態</h3><p id="syncDescription">讀取中…</p><button class="solid-button" type="button" id="syncNow">↻ 重新讀取試算表</button><p class="help-note">網站內建 2026/11/2 快照，離線也有資料。公開試算表的存取權限設定完成後，重新整理即可取得更新。請注意：試算表一旦設為「知道連結的任何人可查看」，其全部分頁都有可能被看到。</p></div>
+        <div class="tool-card"><div class="micro-label">SHEET SYNC</div><h3>試算表同步狀態</h3><p id="syncDescription">讀取中…</p><button class="solid-button" type="button" id="syncNow">↻ 重新讀取試算表</button><p class="help-note">網站已內建 2026/11/3 最新行程與美食分類，離線也能查。只有把試算表設定為「知道連結的任何人可檢視」後，這裡才能自動同步線上編輯；否則仍可使用內建資料。請注意：試算表一旦設為「知道連結的任何人可查看」，其全部分頁都有可能被看到。</p></div>
         <div class="tool-card"><div class="micro-label">OFFLINE · DATA</div><h3>資料與注意事項</h3><p>營業時間、菜單價格、訂位條件會變動，出發前以店家官網或訂位頁為準。逐時天氣為預報，並非即時觀測或降雨保證。日本交通路線請以當下地圖為準。</p><p class="help-note">本網站不會自動公開你的 GPS 位置；地圖導航由你主動點擊開啟。資料在你的瀏覽器暫存，沒有登入系統。</p></div>
         <div class="site-footer">KANSAI WANDER · 2026<br/>做給一個想好好玩十天的人。</div>
       </section>
